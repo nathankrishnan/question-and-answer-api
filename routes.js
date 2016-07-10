@@ -2,26 +2,55 @@
 
 var express = require("express")
 var router = express.Router()
+var Question = require("./models").Question;
+
+// Express trigger
+router.param("qID", function(req, res, next, id){
+  Question.findById(id, function(err, doc){
+    if(err) return next(err);
+    if(!doc) {
+      err = new Error("Not Found");
+      err.status = 404;
+      return next(err);
+    }
+    req.question = doc;
+    return next();
+  });
+});
 
 // As the app handles the request to the router it strips away what is already matched
 // GET /questions
 // Route for questions collection
-router.get("/", function(req, res){
+router.get("/", function(req, res, next){
+  // mongoose query builder
+  Question.find({})
+          .sort({createdAt: -1})
+          .exec(function(err, questions){
+                  if(err) return next(err);
+                  res.json(questions);
+  });
   res.json({response: "You sent me a GET request"});
 });
 
 // POST /questions
 // Route for creating questions
-router.post("/", function(req, res){
+router.post("/", function(req, res, next){
+  var question = new Question(req.body);
+  question.save(function(err, question){
+    if(err) return next(err);
+    res.status(201);
+    res.json(question);
+  });
   res.json({
     response: "You sent me a POST request",
-    body: req.body
+    // body: req.body
   });
 });
 
 // GET /questions/:id
 // Route for specific questions
-router.get("/:qID", function(req, res){
+router.get("/:qID", function(req, res, next){
+  res.json(req.question);
   res.json({response: "You sent me a GET request for ID " + req.params.qID});
 });
 
