@@ -40,7 +40,7 @@ router.get("/", function(req, res, next){
                   if(err) return next(err);
                   res.json(questions);
   });
-  res.json({response: "You sent me a GET request"});
+  //res.json({response: "You sent me a GET request"});
 });
 
 // POST /questions
@@ -52,10 +52,10 @@ router.post("/", function(req, res, next){
     res.status(201);
     res.json(question);
   });
-  res.json({
-    response: "You sent me a POST request",
-    // body: req.body
-  });
+  // res.json({
+  //   response: "You sent me a POST request",
+  //   body: req.body
+  // });
 });
 
 // GET /questions/:id
@@ -75,11 +75,11 @@ router.post("/:qID/answers", function(req, res, next){
     res.json(answer);
   });
 
-  res.json({
-    response: "You sent me a POST request to /answers",
-    questionId: req.params.qID,
-    body: req.body
-  });
+  // res.json({
+  //   response: "You sent me a POST request to /answers",
+  //   questionId: req.params.qID,
+  //   body: req.body
+  // });
 });
 
 // PUT /questions/:qID/answers/:aID
@@ -89,12 +89,12 @@ router.put("/:qID/answers/:aID", function(req, res){
     if(err) return next(err);
     res.json(result);
   });
-  res.json({
-    response: "You sent me a PUT request to /answers",
-    questionId: req.params.qID,
-    answerID: req.params.aID,
-    body: req.body
-  });
+  // res.json({
+  //   response: "You sent me a PUT request to /answers",
+  //   questionId: req.params.qID,
+  //   answerID: req.params.aID,
+  //   body: req.body
+  // });
 });
 
 // DELETE /questions/:qID/answers/:aID
@@ -106,11 +106,11 @@ router.delete("/:qID/answers/:aID", function(req, res){
       res.json(question);
     });
   });
-  res.json({
-    response: "You sent me a DELETE request to /answers",
-    questionId: req.params.qID,
-    answerID: req.params.aID
-  });
+  // res.json({
+  //   response: "You sent me a DELETE request to /answers",
+  //   questionId: req.params.qID,
+  //   answerID: req.params.aID
+  // });
 });
 
 // POST /questions/:qID/answers/:aID/vote-up
@@ -131,12 +131,12 @@ router.post("/:qID/answers/:aID/vote-:dir", function(req, res, next){
     if(err) return next(err);
     res.json(question);
   });
-  res.json({
-    response: "You sent me a POST request to /vote-" + req.params.dir,
-    questionId: req.params.qID,
-    answerID: req.params.aID,
-    vote: req.params.dir
-  });
+  // res.json({
+  //   response: "You sent me a POST request to /vote-" + req.params.dir,
+  //   questionId: req.params.qID,
+  //   answerID: req.params.aID,
+  //   vote: req.params.dir
+  // });
 });
 
 
