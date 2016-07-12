@@ -18,6 +18,17 @@ router.param("qID", function(req, res, next, id){
   });
 });
 
+router.param("aID", function(req, res, next, id){
+  req.answer = req.question.answers.id(id);
+  if(!req.answer) {
+    err = new Error("Not Found");
+    err.status = 404;
+    return next(err);
+  }
+  next();
+});
+
+
 // As the app handles the request to the router it strips away what is already matched
 // GET /questions
 // Route for questions collection
@@ -56,7 +67,14 @@ router.get("/:qID", function(req, res, next){
 
 // POST /questions/:id/answers
 // Route for creating an answer
-router.post("/:qID/answers", function(req, res){
+router.post("/:qID/answers", function(req, res, next){
+  req.question.answers.push(req.body);
+  req.question.save(function(err, answer){
+    if(err) return next(err);
+    res.status(201);
+    res.json(answer);
+  });
+
   res.json({
     response: "You sent me a POST request to /answers",
     questionId: req.params.qID,
@@ -67,6 +85,10 @@ router.post("/:qID/answers", function(req, res){
 // PUT /questions/:qID/answers/:aID
 // Edit a specific answer
 router.put("/:qID/answers/:aID", function(req, res){
+  req.answer.update(req.body, function(err, result){
+    if(err) return next(err);
+    res.json(result);
+  });
   res.json({
     response: "You sent me a PUT request to /answers",
     questionId: req.params.qID,
@@ -78,6 +100,12 @@ router.put("/:qID/answers/:aID", function(req, res){
 // DELETE /questions/:qID/answers/:aID
 // Delete a specific answer
 router.delete("/:qID/answers/:aID", function(req, res){
+  req.answer.remove(function(err){
+    req.question.save(function(err, question){
+      if(err) return next(err);
+      res.json(question);
+    });
+  });
   res.json({
     response: "You sent me a DELETE request to /answers",
     questionId: req.params.qID,
