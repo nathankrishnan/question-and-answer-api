@@ -23,7 +23,7 @@ var AnswerSchema = new Schema({
 });
 
 // updated answers
-AnswerSchema.method("update",  function(updates, callback){
+AnswerSchema.method("update", function(updates, callback) {
   // merge the updates into the answer document
   Object.assign(this, updates, {updatedAt: new Date()});
   this.parent().save(callback);

@@ -86,8 +86,8 @@ router.post("/:qID/answers", function(req, res, next){
 // Edit a specific answer
 router.put("/:qID/answers/:aID", function(req, res){
   req.answer.update(req.body, function(err, result){
-    if(err) return next(err);
-    res.json(result);
+		if(err) return next(err);
+		res.json(result);
   });
   // res.json({
   //   response: "You sent me a PUT request to /answers",
