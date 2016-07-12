@@ -123,9 +123,14 @@ router.post("/:qID/answers/:aID/vote-:dir", function(req, res, next){
     err.status = 404;
     next(err);
   } else {
+      req.vote = req.params.dir;
       next();
   }
 }, function(req, res){
+  req.answer.vote(req.vote, function(err, question){
+    if(err) return next(err);
+    res.json(question);
+  });
   res.json({
     response: "You sent me a POST request to /vote-" + req.params.dir,
     questionId: req.params.qID,
